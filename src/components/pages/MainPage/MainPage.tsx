@@ -1,28 +1,50 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import classes from './MainPage.module.css'
 import {Input} from "../../../UI/Input/Input";
+import {Card} from '../../Card/Card';
 import {Button} from "../../../UI/Buttons/Button";
 import {Cities} from "../../../Data/Cities";
-
+import axios from "axios";
+import {DateInput} from "../../../UI/fields";
+import {Cards} from "../../../utils/types/types";
+// раздетить на компоненты адаптив
 
 export const MainPage: React.FC = () => {
-    let currentDate:any = new Date();
-
-    const [formValues, setFormValue] = useState({ departure : '', arrival: '', date : currentDate, seats: '1'})
+    let date = new Date();
     const [departureValue, setDepartureValue] = useState('');
     const [arrivalValue, setArrivalValue] = useState('');
+    const [dateValue, setDateValue] = useState(date);
+    const [seatsValue, setSeatsValue] = useState('1')
+    const [formIsValid, setFormIsValid] = useState(false)
+    const [cards, setCards] = useState<Cards[]>([]);
 
+    useEffect(()=>{
+
+    },[])
+
+
+    useEffect(()=> {
+        const identifier = setTimeout(()=>{
+            setFormIsValid(
+                departureValue.length > 3 && arrivalValue.length > 3
+            )
+            console.log(formIsValid)
+        }, 500)
+        return () => {
+            clearTimeout(identifier);
+        }
+    }, [departureValue, arrivalValue ])
 
     const filteredDepartureCities = Cities.filter(city => {
         if (departureValue.length > 1) {
             return city.name.toLowerCase().includes(departureValue.toLowerCase());
-        }
+        } else return null;
     })
 
     const filteredArrivalCities = Cities.filter(city => {
         if (arrivalValue.length > 1) {
             return city.name.toLowerCase().includes(arrivalValue.toLowerCase());
-        }
+        } else return null;
     })
 
     const cityDepartureClickHandler = (event: any) => {
@@ -34,10 +56,36 @@ export const MainPage: React.FC = () => {
         setArrivalValue(event.target.textContent)
     }
 
+    async function fetchCards() {
+        try {
+            const response = await axios.get<Cards[]>('http://localhost:8081/get/', {
+                params: {
+                    arrival: arrivalValue,
+                    seats: seatsValue,
+                    day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
+                    departure: departureValue
+                }, headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                }
+            })
+            setCards(response.data)
+        }catch (e) {
 
+        }
+    }
+
+    const submitHandler = async ( event: React.FormEvent) => {
+        event.preventDefault();
+        fetchCards();
+    }
     return (
         <div className={classes.page}>
+            <form   onSubmit={submitHandler}>
             <div className={classes.container}>
+                <h1>Поездки на ваш выбор</h1>
+
+            <div className={classes.form_container}>
 
                     <div className={classes.input_container}>
                         <Input type="text" placeholder="Откуда"
@@ -58,6 +106,7 @@ export const MainPage: React.FC = () => {
                             }
                         </ul>
                     </div>
+                    <hr/>
                     <div className={classes.input_container} >
                         <Input type="text" placeholder="Куда"
                                value={arrivalValue}
@@ -77,24 +126,31 @@ export const MainPage: React.FC = () => {
                             }
                         </ul>
                     </div>
+                    <hr/>
                     <div className={classes.input_container}>
-                        <Input type="date"
-                               onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
-                                   const date = event.target.value;
-                                   setFormValue({...formValues, date })
+                        <DateInput label={''} value={dateValue}
+                               onChange={(date)=>{
+                                   setDateValue(date);
                                }}
+
                         />
                     </div>
+                    <hr/>
                     <div className={classes.input_container}>
-                        <Input type="number" placeholder="Мест" min="1"
+                        <Input type="number" placeholder="Мест" min="1" value={seatsValue}
                                onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
-                                   const seats = event.target.value;
-                                   setFormValue({...formValues, seats })
+                                   setSeatsValue(event.target.value)
                                }}/>
                     </div>
-                    <Button type="submit"
+                    <hr/>
+                    <Button  disabled={!formIsValid}
                     >Поиск</Button>
+
             </div>
+
+            </div>
+            </form>
+            <Card cards={cards}/>
         </div>
     )
 }

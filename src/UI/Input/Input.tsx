@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Input.module.css'
 
-interface InputProps extends React.HTMLProps<HTMLInputElement> {
+export interface InputProps extends React.HTMLProps<HTMLInputElement> {
     isError?: boolean;
     helperText?: string;
 }
