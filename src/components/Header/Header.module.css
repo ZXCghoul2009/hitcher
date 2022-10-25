@@ -1,0 +1,73 @@
+.header {
+    width: 100%;
+    height: 4rem;
+    z-index: 111;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10%;
+    position: fixed;
+
+}
+
+.logo {
+    font-family: 'Lato', sans-serif;
+    font-size: 2rem;
+    color:#7588ff;
+    margin: 0;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.header li {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.header a {
+    text-decoration: none;
+    color: #42d9d9;
+    font-weight: bold;
+}
+
+.header button {
+    font: inherit;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.header a:hover {
+    color: #7588ff;
+}
+.icon_search {
+    margin-right: 0.5rem;
+    background-image: url("/src/static/images/search_icon.svg");
+    cursor: pointer;
+    width: 1.35rem;
+    height: 1.35rem;
+    background-size: 1.35rem 1.35rem;
+}
+.icon_add_trip {
+    margin-right: 0.5rem;
+    background-image: url("/src/static/images/add-travel.svg");
+    cursor: pointer;
+    width: 1.35rem;
+    height: 1.35rem;
+    background-size: 1.35rem 1.35rem;
+}

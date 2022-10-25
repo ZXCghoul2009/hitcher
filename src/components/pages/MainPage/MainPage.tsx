@@ -28,12 +28,11 @@ export const MainPage: React.FC = () => {
             setFormIsValid(
                 departureValue.length > 3 && arrivalValue.length > 3
             )
-            console.log(formIsValid)
         }, 500)
         return () => {
             clearTimeout(identifier);
         }
-    }, [departureValue, arrivalValue ])
+    }, [ departureValue, arrivalValue ])
 
     const filteredDepartureCities = Cities.filter(city => {
         if (departureValue.length > 1) {
@@ -58,15 +57,12 @@ export const MainPage: React.FC = () => {
 
     async function fetchCards() {
         try {
-            const response = await axios.get<Cards[]>('http://localhost:8081/get/', {
+            const response = await axios.get<Cards[]>('http://localhost:8081/get', {
                 params: {
                     arrival: arrivalValue,
                     seats: seatsValue,
                     day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
                     departure: departureValue
-                }, headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
                 }
             })
             setCards(response.data)
@@ -128,7 +124,7 @@ export const MainPage: React.FC = () => {
                     </div>
                     <hr/>
                     <div className={classes.input_container}>
-                        <DateInput label={''} value={dateValue}
+                        <DateInput label={''} value={dateValue} readOnly
                                onChange={(date)=>{
                                    setDateValue(date);
                                }}
