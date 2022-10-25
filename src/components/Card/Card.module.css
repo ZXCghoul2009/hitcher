@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .card {
@@ -27,10 +27,16 @@ body {
     flex-direction: row;
     margin: 20px;
     width: 30%;
+    justify-content: space-between;
     min-height: 150px;
     border-radius: 10px;
     box-shadow: 5px 5px 5px 5px   rgba(0, 0, 0, 0.25);
     transition: all 0.2s;
+}
+
+.card_trip {
+    display: flex;
+    flex-direction: row;
 }
 
 .card:hover {
@@ -41,18 +47,28 @@ body {
 .card_header {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 10px 2px;
+    align-items: start;
+    padding-top: 10px;
+    font-weight: 600;
 
 }
 .card_time {
     padding: 10px;
 }
 .vertborder {
-    margin-top: 2px;
+    align-items: center;
+    margin-top: 15px;
+    margin-right: 5px;
     border-left: 5px solid #286969;
-    height: 20px;
+    height: 40px;
     width: 1px;
     border-radius: 2px;
 
+}
+.card_info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px 10px;
+    font-weight: 500;
 }

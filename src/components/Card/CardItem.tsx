@@ -9,16 +9,29 @@ interface CardItemProps {
 const CardItem: React.FC<CardItemProps> = ({card}) => {
     return (
         <div className={styles.card}>
-            <div className={styles.card_time}>
-                {card.time}
-            </div>
-            <div className={styles.card_header}>
-                {card.arrival}
+            <div className={styles.card_trip}>
+                <div className={styles.card_time}>
+                    {card.time}
+                </div>
                 <div className={styles.vertborder}>
                 </div>
-                {card.departure}
+                <div className={styles.card_header}>
+                    <div>
+                        {card.departure}
+                    </div>
+                    <div>
+                        {card.arrival}
+                    </div>
+                </div>
             </div>
-                {card.price}  {card.seats}
+            <div className={styles.card_info}>
+                <div>
+                    мест: {card.seats}
+                </div>
+                <div>
+                    {card.price} BYN
+                </div>
+            </div>
         </div>
     );
 };

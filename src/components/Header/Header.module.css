@@ -37,7 +37,7 @@
 
 .header a {
     text-decoration: none;
-    color: #42d9d9;
+    color: #a3adfa;
     font-weight: bold;
 }
 
@@ -59,15 +59,15 @@
     margin-right: 0.5rem;
     background-image: url("/src/static/images/search_icon.svg");
     cursor: pointer;
-    width: 1.35rem;
-    height: 1.35rem;
-    background-size: 1.35rem 1.35rem;
+    width: 1.65rem;
+    height: 1.65rem;
+    background-size: 1.65rem 1.65rem;
 }
 .icon_add_trip {
     margin-right: 0.5rem;
     background-image: url("/src/static/images/add-travel.svg");
     cursor: pointer;
-    width: 1.35rem;
-    height: 1.35rem;
-    background-size: 1.35rem 1.35rem;
+    width: 1.45rem;
+    height: 1.45rem;
+    background-size: 1.45rem 1.45rem;
 }
