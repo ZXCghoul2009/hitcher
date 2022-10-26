@@ -13,8 +13,12 @@ const CardItem: React.FC<CardItemProps> = ({card}) => {
                 <div className={styles.card_time}>
                     {card.time}
                 </div>
-                <div className={styles.vertborder}>
+                <div className={styles.assets}>
+                    <div className={styles.icon_checkpoint}/>
+                    <div className={styles.vertborder}/>
+                    <div className={styles.icon_checkpoint}/>
                 </div>
+
                 <div className={styles.card_header}>
                     <div>
                         {card.departure}
