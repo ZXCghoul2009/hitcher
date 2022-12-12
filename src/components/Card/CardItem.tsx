@@ -11,7 +11,7 @@ const CardItem: React.FC<CardItemProps> = ({card}) => {
         <div className={styles.card}>
             <div className={styles.card_trip}>
                 <div className={styles.card_time}>
-                    {card.time}
+                    {card.time.slice(0, -3)}
                 </div>
                 <div className={styles.assets}>
                     <div className={styles.icon_checkpoint}/>

@@ -8,7 +8,7 @@ import axios from "axios";
 import {DateInput} from "../../../UI/fields";
 import {Cards} from "../../../utils/types/types";
 // раздетить на компоненты адаптив
-
+// картинку для свитча городов
 export const MainPage: React.FC = () => {
     let date = new Date();
     const [departureValue, setDepartureValue] = useState('');
@@ -17,6 +17,15 @@ export const MainPage: React.FC = () => {
     const [seatsValue, setSeatsValue] = useState('1')
     const [formIsValid, setFormIsValid] = useState(false)
     const [cards, setCards] = useState<Cards[]>([]);
+    const [notFound, setNotFound] = useState(true);
+
+
+    const switchHandler = (event: React.MouseEvent) => {
+        event.preventDefault()
+        setDepartureValue(arrivalValue);
+        setArrivalValue(departureValue);
+
+    }
 
     useEffect(()=>{
 
@@ -46,9 +55,9 @@ export const MainPage: React.FC = () => {
         } else return null;
     })
 
+
     const cityDepartureClickHandler = (event: any) => {
         setDepartureValue(event.target.textContent)
-
     }
 
     const cityArrivalClickHandler = (event: any) => {
@@ -59,19 +68,23 @@ export const MainPage: React.FC = () => {
         try {
             const response = await axios.get<Cards[]>('http://localhost:8081/get', {
                 params: {
-                    arrival: arrivalValue,
+                    arrival: arrivalValue.trim(),
                     seats: seatsValue,
                     day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
-                    departure: departureValue
+                    departure: departureValue.trim()
                 }
             })
             setCards(response.data)
+            setNotFound(true)
+            if (response.data.length === 0) {
+                setNotFound( false)
+            }
         }catch (e) {
 
         }
     }
 
-    const submitHandler = async ( event: React.FormEvent) => {
+    const submitHandler = ( event: React.FormEvent) => {
         event.preventDefault();
         fetchCards();
     }
@@ -86,7 +99,7 @@ export const MainPage: React.FC = () => {
                     <div className={classes.input_container}>
                         <Input type="text" placeholder="Откуда"
                                value={departureValue}
-                               onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
+                               onChange={(event :any)=>{
                                    setDepartureValue(event.target.value)
                                }}
                         />
@@ -103,6 +116,7 @@ export const MainPage: React.FC = () => {
                         </ul>
                     </div>
                     <hr/>
+                <div className={classes.arrows} onClick={switchHandler}/>
                     <div className={classes.input_container} >
                         <Input type="text" placeholder="Куда"
                                value={arrivalValue}
@@ -146,6 +160,7 @@ export const MainPage: React.FC = () => {
 
             </div>
             </form>
+            {!notFound && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
             <Card cards={cards}/>
         </div>
     )
