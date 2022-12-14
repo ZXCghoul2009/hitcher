@@ -1,0 +1,17 @@
+.page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    color: #232528;
+    height: 30vh;
+    width: 60%;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px   rgba(0, 0, 0, 0.25);
+}

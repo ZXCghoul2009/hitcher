@@ -4,11 +4,12 @@ import styles from './Card.module.css';
 
 interface CardItemProps {
     card: Cards;
+    onClick: (card:Cards)=>void;
 }
 
-const CardItem: React.FC<CardItemProps> = ({card}) => {
+const CardItem: React.FC<CardItemProps> = ({card, onClick}) => {
     return (
-        <div className={styles.card}>
+        <div onClick={()=>onClick(card)} className={styles.card}>
             <div className={styles.card_trip}>
                 <div className={styles.card_time}>
                     {card.time.slice(0, -3)}
