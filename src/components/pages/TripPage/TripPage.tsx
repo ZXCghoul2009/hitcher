@@ -4,6 +4,8 @@ import {Trip} from "../../../utils/types/types";
 import {useParams} from "react-router-dom";
 
 import styles from './TripPage.module.css'
+import moment from "moment";
+import 'moment/locale/ru'
 
 type TripParams = {
   id:string,
@@ -25,12 +27,30 @@ export const TripPage:React.FC = () => {
     }
   }
 
+
+
   return (
       <div className={styles.page}>
         <div className={styles.container}>
-
-          <h1>{trip?.day.replace(/-/g,'.').slice(5)}</h1>
-          {trip?.departure}
+          <div className={styles.date}>
+            {moment().locale('ru') && moment(trip?.day).format('ddd')[0].toUpperCase() }{moment(trip?.day).format('ddd')[1]}, {moment(trip?.day).format('D MMMM')}
+          </div>
+          <div className={styles.information}>
+            <div>
+              {trip?.arrival}
+            </div>
+            <div>
+              {trip?.departure}
+            </div>
+          </div>
+          <div className={styles.price_info}>
+            <div>
+              Всего за 1 пассажира
+            </div>
+            <div className={styles.price}>
+              {trip?.price} BYN
+            </div>
+          </div>
         </div>
       </div>
   );

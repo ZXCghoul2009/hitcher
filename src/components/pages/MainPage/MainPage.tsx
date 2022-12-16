@@ -7,10 +7,14 @@ import {Cities} from "../../../Data/Cities";
 import axios from "axios";
 import {DateInput} from "../../../UI/fields";
 import {Cards} from "../../../utils/types/types";
+import {useTypedSelector} from "../../../utils/hooks/useTypedSelector";
+import {useActions} from "../../../utils/hooks/useActions";
 // раздетить на компоненты адаптив
 // картинку для свитча городов
 export const MainPage: React.FC = () => {
     let date = new Date();
+    const {trips} = useTypedSelector(state => state.trip)
+    const {fetchTrip} = useActions()
     const [departureValue, setDepartureValue] = useState('');
     const [arrivalValue, setArrivalValue] = useState('');
     const [dateValue, setDateValue] = useState(date);
@@ -86,7 +90,7 @@ export const MainPage: React.FC = () => {
 
     const submitHandler = ( event: React.FormEvent) => {
         event.preventDefault();
-        fetchCards();
+        fetchTrip(arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
     }
     return (
         <div className={classes.page}>
@@ -161,7 +165,7 @@ export const MainPage: React.FC = () => {
             </div>
             </form>
             {!notFound && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
-            <Card cards={cards}/>
+            <Card trips={trips}/>
         </div>
     )
 }

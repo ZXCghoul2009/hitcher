@@ -5,15 +5,15 @@ import styles from './Card.module.css';
 import {useNavigate} from "react-router-dom";
 
 interface CardListProps {
-    cards: Cards[]
+    trips: Cards[]
 }
 
-export const Card: React.FC<CardListProps> =({ cards}) => {
+export const Card: React.FC<CardListProps> =({ trips}) => {
     const history = useNavigate()
     return (
         <div className={styles.cards} >
-            {cards.map(card =>
-                    <CardItem onClick={(card)=> history('/'+card.id)} key={card.id} card={card}/>
+            {trips.map(trip =>
+                    <CardItem onClick={(card)=> history('/'+trip.id)} key={trip.id} trip={trip}/>
             )}
         </div>
     )

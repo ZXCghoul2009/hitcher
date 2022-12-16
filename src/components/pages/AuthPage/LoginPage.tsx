@@ -47,7 +47,7 @@ export const LoginPage = () => {
                     <div className={styles.input_container}>
                         <Input
                             value={formValues.username}
-                            placeholder="username"
+                            placeholder="Имя пользователя"
                             onChange={(event :React.ChangeEvent<HTMLInputElement>) => {
                                 const username = event.target.value;
                                 setFormValue({...formValues, username})
@@ -65,7 +65,7 @@ export const LoginPage = () => {
                         <Input
                             type="password"
                             value={formValues.password}
-                            placeholder="password"
+                            placeholder="Пароль"
                             onChange={(event :React.ChangeEvent<HTMLInputElement>) => {
                                 const password = event.target.value;
                                 setFormValue({...formValues, password})
@@ -81,11 +81,11 @@ export const LoginPage = () => {
                         />
                     </div>
                     <div>
-                        <Button>Sign in</Button>
+                        <Button>Войти</Button>
                     </div>
                 </div>
                 <div className={styles.sign_up_container}>
-                    Create new account
+                    Создать новый аккаунт
                 </div>
             </div>
         </div>

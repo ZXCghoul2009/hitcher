@@ -3,16 +3,16 @@ import {Cards} from "../../utils/types/types";
 import styles from './Card.module.css';
 
 interface CardItemProps {
-    card: Cards;
-    onClick: (card:Cards)=>void;
+    trip: Cards;
+    onClick: (trip:Cards)=>void;
 }
 
-const CardItem: React.FC<CardItemProps> = ({card, onClick}) => {
+const CardItem: React.FC<CardItemProps> = ({trip, onClick}) => {
     return (
-        <div onClick={()=>onClick(card)} className={styles.card}>
+        <div onClick={()=>onClick(trip)} className={styles.card}>
             <div className={styles.card_trip}>
                 <div className={styles.card_time}>
-                    {card.time.slice(0, -3)}
+                    {trip.time.slice(0, -3)}
                 </div>
                 <div className={styles.assets}>
                     <div className={styles.icon_checkpoint}/>
@@ -22,19 +22,19 @@ const CardItem: React.FC<CardItemProps> = ({card, onClick}) => {
 
                 <div className={styles.card_header}>
                     <div>
-                        {card.departure}
+                        {trip.departure}
                     </div>
                     <div>
-                        {card.arrival}
+                        {trip.arrival}
                     </div>
                 </div>
             </div>
             <div className={styles.card_info}>
                 <div>
-                    мест: {card.seats}
+                    мест: {trip.seats}
                 </div>
                 <div>
-                    {card.price} BYN
+                    {trip.price} BYN
                 </div>
             </div>
         </div>
