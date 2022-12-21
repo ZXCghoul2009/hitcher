@@ -7,7 +7,6 @@ export const fetchTrip = (arrival = '', seats = '1',day ='', departure ='') => {
   return async (dispatch: Dispatch<TripActionType>) => {
     try {
       dispatch({type: TripActions.FETCH_TRIP})
-      console.log('nice')
       const response = await axios.get('http://localhost:8081/get', {
         params : {
           arrival: arrival,

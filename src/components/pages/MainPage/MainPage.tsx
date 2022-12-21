@@ -31,10 +31,6 @@ export const MainPage: React.FC = () => {
 
     }
 
-    useEffect(()=>{
-
-    },[])
-
 
     useEffect(()=> {
         const identifier = setTimeout(()=>{

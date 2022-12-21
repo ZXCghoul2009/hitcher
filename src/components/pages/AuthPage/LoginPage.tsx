@@ -1,93 +1,101 @@
 import React from 'react';
 import { Input } from '../../../UI/Input/Input'
 import { Button } from '../../../UI/Buttons/Button';
+import {PasswordInput} from '../../../UI/Input/PasswordInput/PasswordInput'
 import {useState} from "react";
 
 import styles from './LoginPage.module.css'
+import {useNavigate} from "react-router-dom";
 
 interface FormErrors {
-    username: string | null;
-    password: string | null
+  email: string | null;
+  password: string | null
 }
 
 const validateIsEmpty = (value: string) => {
-    if (!value) return 'field required';
-    return null;
+  if (!value) return 'Поле должно быть заполнено';
+  return null;
 }
 
-const validateUsername = (value:string) => {
-    return validateIsEmpty(value)
+const validateIsEMail = (value: string) => {
+  if (!value.includes('@')) return 'Поле должно содержать @';
+  return null;
 }
 
-const validatePassword = (value:string) => {
-    return validateIsEmpty(value)
+const validateEmail = (value: string) => {
+  return validateIsEmpty(value) || validateIsEMail(value)
+}
+
+const validatePassword = (value: string) => {
+  return validateIsEmpty(value)
 }
 
 const loginFormValidateSchema = {
-    username : validateUsername,
-    password : validatePassword
+  email: validateEmail,
+  password: validatePassword
 }
 
-const validateLoginForm  = (name: keyof typeof loginFormValidateSchema, value: string) =>{
-    return loginFormValidateSchema[name](value)
+const validateLoginForm = (name: keyof typeof loginFormValidateSchema, value: string) => {
+  return loginFormValidateSchema[name](value)
 }
 
 export const LoginPage = () => {
+  const navigate = useNavigate()
 
-    const [formValues, setFormValue] = useState({ username : '', password: ''})
-    const [formErrors, setFormErrors] = useState<FormErrors> ({
-        username: null, password: null
-    })
+  const [formValues, setFormValue] = useState({email: '', password: ''})
+  const [formErrors, setFormErrors] = useState<FormErrors>({
+    email: null, password: null
+  })
 
-    return (
-        <div className={styles.page}>
-            <div className={styles.container}>
-                <div className={styles.header_container}>Hitcher</div>
-                <div className={styles.form_container}>
-                    <div className={styles.input_container}>
-                        <Input
-                            value={formValues.username}
-                            placeholder="Имя пользователя"
-                            onChange={(event :React.ChangeEvent<HTMLInputElement>) => {
-                                const username = event.target.value;
-                                setFormValue({...formValues, username})
-                                const error = validateLoginForm('username', username)
-                                return setFormErrors({...formErrors, username: error})
-                            }
-                            }
-                            {...(!!formErrors.username && {
-                                isError: !!formErrors.username,
-                                helperText: formErrors.username
-                            })}
-                        />
-                    </div>
-                    <div className={styles.input_container}>
-                        <Input
-                            type="password"
-                            value={formValues.password}
-                            placeholder="Пароль"
-                            onChange={(event :React.ChangeEvent<HTMLInputElement>) => {
-                                const password = event.target.value;
-                                setFormValue({...formValues, password})
-                                const error = validateLoginForm('password', password)
-                                return setFormErrors({...formErrors, password: error})
-                            }
-                            }
-                            {...(!!formErrors.password && {
-                                    isError: !!formErrors.password,
-                                    helperText: formErrors.password
-                                }
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <Button>Войти</Button>
-                    </div>
-                </div>
-                <div className={styles.sign_up_container}>
-                    Создать новый аккаунт
-                </div>
+  return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.header_container}>Hitcher</div>
+          <div className={styles.form_container}>
+            <div className={styles.input_container}>
+              <Input
+                  value={formValues.email}
+                  placeholder="Почта"
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const email = event.target.value;
+                    setFormValue({...formValues, email})
+                    const error = validateLoginForm('email', email)
+                    return setFormErrors({...formErrors, email: error})
+                   }
+                  }
+                  {...(!!formErrors.email && {
+                    isError: !!formErrors.email,
+                    helperText: formErrors.email
+                  })}
+              />
             </div>
+            <div className={styles.input_container}>
+              <PasswordInput
+                  type="password"
+                  value={formValues.password}
+                  placeholder="Пароль"
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const password = event.target.value;
+                    setFormValue({...formValues, password})
+                    const error = validateLoginForm('password', password)
+                    return setFormErrors({...formErrors, password: error})
+                   }
+                  }
+                  {...(!!formErrors.password && {
+                        isError: !!formErrors.password,
+                        helperText: formErrors.password
+                      }
+                  )}
+              />
+            </div>
+            <div>
+              <Button>Войти</Button>
+            </div>
+          </div>
+          <div onClick={() => navigate('/signUp')} className={styles.sign_up_container}>
+            Создать аккаунт
+          </div>
         </div>
-    );
+      </div>
+  );
 };

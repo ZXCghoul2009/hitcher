@@ -5,6 +5,8 @@ import {MainPage} from "./components/pages/MainPage/MainPage";
 import {LoginPage} from "./components/pages/AuthPage/LoginPage";
 import Header from "./components/Header/Header";
 import {TripPage} from "./components/pages/TripPage/TripPage";
+import {SignUpPage} from "./components/pages/AuthPage/SignUpPage";
+import {VerificationEmailPage} from "./components/pages/VerificationEmailPage/VerificationEmailPage";
 
 
 
@@ -16,8 +18,10 @@ function App() {
               <Routes>
                   <Route path="/" element={<MainPage/>} />
                   <Route path="/search" element={<MainPage/>} />
-                  <Route path="auth" element={<LoginPage/>} />
+                  <Route path="/auth" element={<LoginPage/>} />
+                  <Route path="/signUp" element={<SignUpPage/>} />
                   <Route path="/:id" element={<TripPage/>} />
+                <Route path="/signup/confirm" element={<VerificationEmailPage/>} />
               </Routes>
 
           </BrowserRouter>

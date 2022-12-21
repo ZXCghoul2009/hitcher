@@ -11,6 +11,7 @@ export const Input: React.FC <InputProps> = ( { isError = false, helperText, ...
     return (
         <>
             <input className={`${classes.input} ${isError ? classes.error : ''}`} {...props}/>
+            { isError && helperText && <div className={classes.helper_text}>{helperText}</div>}
         </>
     )
 }
