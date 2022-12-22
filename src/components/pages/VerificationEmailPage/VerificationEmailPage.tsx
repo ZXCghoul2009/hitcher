@@ -1,26 +1,41 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+
+import OtpInput from 'react-otp-input';
 
 import styles from './VerificationEmailPage.module.css'
 
 export const VerificationEmailPage: React.FC = () => {
-  const [code, setCode] = useState(new Array(6).fill(""));
 
-  const handleChange = (element: any, index:number) => {
-    if (isNaN(element.value)) return false;
+  const navigate = useNavigate()
 
-    setCode([...code.map((d, idx) => (idx === index ? element.value : d))]);
+  const [code, setCode] = useState({otp: ''});
+  const [error, setError] = useState<boolean>(true)
 
-    //Focus next input
-    if (element.nextSibling) {
-      element.nextSibling.focus();
-    }
+  const handleChangeOTP = (otp: string) => {
+    setCode({ otp })
   };
 
+  async function checkCode () {
+    try {
+      await axios.get('http://localhost:8081/verify', {
+        headers : {
+          'code' : `${code.otp}`
+        }
+      })
+      setError(true)
+      navigate('/')
+    }catch (e) {
+      console.log(e)
+      setError(false)
+    }
 
+  }
 
   useEffect(()=> {
-      if (code.join('').length === 6) {
-        console.log(code.join(''))
+      if (code.otp.length === 6) {
+        checkCode()
       }
   }, [code])
 
@@ -31,24 +46,18 @@ export const VerificationEmailPage: React.FC = () => {
             <div >
               <h2>Проверьте вашу почту</h2>
               <p>Мы выслали на какая-то почту код-потверждения</p>
-              {code.map((data, index) => {
-                return (
-                    <input
-                        className={styles.otp_field}
-                        type="text"
-                        maxLength={1}
-                        key={index}
-                        value={data}
-                        onChange={e => handleChange(e.target, index)}
-                        onFocus={e => e.target.select()}
-                    />
-                );
-              })}
+              <OtpInput
+                value={code.otp}
+                onChange={handleChangeOTP}
+                numInputs={6}
+                isInputNum={true}
+                inputStyle = {styles.otp_field}
+              />
+              {!error && <p>Неверный код</p>}
             </div>
           </div>
         </div>
       </div>
-
   );
 };
 

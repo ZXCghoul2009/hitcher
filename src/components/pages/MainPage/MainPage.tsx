@@ -4,9 +4,7 @@ import {Input} from "../../../UI/Input/Input";
 import {Card} from '../../Card/Card';
 import {Button} from "../../../UI/Buttons/Button";
 import {Cities} from "../../../Data/Cities";
-import axios from "axios";
 import {DateInput} from "../../../UI/fields";
-import {Cards} from "../../../utils/types/types";
 import {useTypedSelector} from "../../../utils/hooks/useTypedSelector";
 import {useActions} from "../../../utils/hooks/useActions";
 // раздетить на компоненты адаптив
@@ -20,7 +18,6 @@ export const MainPage: React.FC = () => {
     const [dateValue, setDateValue] = useState(date);
     const [seatsValue, setSeatsValue] = useState('1')
     const [formIsValid, setFormIsValid] = useState(false)
-    const [cards, setCards] = useState<Cards[]>([]);
     const [notFound, setNotFound] = useState(true);
 
 
@@ -35,7 +32,7 @@ export const MainPage: React.FC = () => {
     useEffect(()=> {
         const identifier = setTimeout(()=>{
             setFormIsValid(
-                departureValue.length > 3 && arrivalValue.length > 3
+                departureValue.length > 2 && arrivalValue.length > 2
             )
         }, 500)
         return () => {
@@ -64,29 +61,17 @@ export const MainPage: React.FC = () => {
         setArrivalValue(event.target.textContent)
     }
 
-    async function fetchCards() {
-        try {
-            const response = await axios.get<Cards[]>('http://localhost:8081/get', {
-                params: {
-                    arrival: arrivalValue.trim(),
-                    seats: seatsValue,
-                    day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
-                    departure: departureValue.trim()
-                }
-            })
-            setCards(response.data)
-            setNotFound(true)
-            if (response.data.length === 0) {
-                setNotFound( false)
-            }
-        }catch (e) {
 
-        }
-    }
 
     const submitHandler = ( event: React.FormEvent) => {
         event.preventDefault();
-        fetchTrip(arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+        if (formIsValid) {
+            fetchTrip(arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+            setNotFound(true)
+        }
+        if (trips.length === 0) {
+          setNotFound( false)
+        }
     }
     return (
         <div className={classes.page}>
@@ -153,7 +138,7 @@ export const MainPage: React.FC = () => {
                                }}/>
                     </div>
                     <hr/>
-                    <Button  disabled={!formIsValid}
+                    <Button  disabled={formIsValid}
                     >Поиск</Button>
 
             </div>

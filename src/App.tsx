@@ -21,7 +21,7 @@ function App() {
                   <Route path="/auth" element={<LoginPage/>} />
                   <Route path="/signUp" element={<SignUpPage/>} />
                   <Route path="/:id" element={<TripPage/>} />
-                <Route path="/signup/confirm" element={<VerificationEmailPage/>} />
+                <Route path="/confirmMail" element={<VerificationEmailPage/>} />
               </Routes>
 
           </BrowserRouter>
