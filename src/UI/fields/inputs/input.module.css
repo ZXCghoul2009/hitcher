@@ -30,7 +30,6 @@
 .input_container {
   display: flex;
   width: 100%;
-  padding: 8px;
 }
 
 .indicator_container ~ .input_container {

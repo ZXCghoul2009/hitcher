@@ -45,7 +45,7 @@ export const VerificationEmailPage: React.FC = () => {
           <div className="row">
             <div >
               <h2>Проверьте вашу почту</h2>
-              <p>Мы выслали на какая-то почту код-потверждения</p>
+              <p>Мы выслали на, указанную при регистрации, почту код-потверждения</p>
               <OtpInput
                 value={code.otp}
                 onChange={handleChangeOTP}

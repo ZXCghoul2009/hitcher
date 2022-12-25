@@ -6,7 +6,7 @@
 
 .container {
     background-image: url("/src/assets/banner.jpg");
-    width: 100vw;
+    width: 100%;
     height: 50vh;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
     align-items: center;
     flex-direction: row;
     box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.15);
-    padding: 10px 20px;
+    padding: 5px 10px;
     width: 70%;
     font-size: 1.3rem;
 }
@@ -41,6 +41,7 @@
     width: 100%;
     outline:0;
     position: relative;
+    padding: 0.4rem;
 }
 
 .auto_complete {
@@ -87,7 +88,27 @@ form {
     background-repeat: no-repeat;
     cursor: pointer;
     height: 1.6rem;
-    width: 1.8rem;
-    padding: 0 1.2rem;
-    background-size: 1.6rem 1.8rem;
+    width: 1.6rem;
+    padding: 0.9rem 0.9rem;
+    background-size: 1.6rem 1.6rem;
+}
+
+@media only screen and (max-width: 1200px) {
+    .form_container {
+        flex-direction: column;
+        max-width: 35%;
+    }
+    .container h1 {
+        text-indent: 100%;
+        overflow: hidden;
+    }
+    .arrows {
+        transform: rotate(90deg);
+    }
+}
+@media only screen and (max-width: 650px) {
+    .form_container {
+        flex-direction: column;
+        max-width: 80%;
+    }
 }

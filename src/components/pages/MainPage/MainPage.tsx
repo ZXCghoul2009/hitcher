@@ -100,7 +100,6 @@ export const MainPage: React.FC = () => {
                             }
                         </ul>
                     </div>
-                    <hr/>
                 <div className={classes.arrows} onClick={switchHandler}/>
                     <div className={classes.input_container} >
                         <Input type="text" placeholder="Куда"
@@ -121,7 +120,6 @@ export const MainPage: React.FC = () => {
                             }
                         </ul>
                     </div>
-                    <hr/>
                     <div className={classes.input_container}>
                         <DateInput label={''} value={dateValue} readOnly
                                onChange={(date)=>{
@@ -130,14 +128,12 @@ export const MainPage: React.FC = () => {
 
                         />
                     </div>
-                    <hr/>
                     <div className={classes.input_container}>
                         <Input type="number" placeholder="Мест" min="1" value={seatsValue}
                                onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
                                    setSeatsValue(event.target.value)
                                }}/>
                     </div>
-                    <hr/>
                     <Button  disabled={formIsValid}
                     >Поиск</Button>
 
