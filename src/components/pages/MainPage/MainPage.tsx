@@ -5,25 +5,27 @@ import {Card} from '../../Card/Card';
 import {Button} from "../../../UI/Buttons/Button";
 import {Cities} from "../../../Data/Cities";
 import {CheckBox, DateInput} from "../../../UI/fields";
-import {useTypedSelector} from "../../../utils/hooks/useTypedSelector";
-import {useActions} from "../../../utils/hooks/useActions";
 import {Loading} from "../../../UI/Loading/Loading";
+import useLocalStorage from "use-local-storage";
+import axios from "axios";
 // раздетить на компоненты адаптив
 // картинку для свитча городов
 //  sort component
 export const MainPage: React.FC = () => {
 
   let date = new Date();
-  const {trips, loading, error} = useTypedSelector(state => state.trip)
-  const {fetchTrip} = useActions()
-  const [departureValue, setDepartureValue] = useState('');
-  const [arrivalValue, setArrivalValue] = useState('');
-  const [dateValue, setDateValue] = useState(date);
-  const [seatsValue, setSeatsValue] = useState('1')
+
+  const [departureValue, setDepartureValue] = useLocalStorage<string>("departure", '');
+  const [arrivalValue, setArrivalValue] = useLocalStorage<string>("arrival", '');
+  const [dateValue, setDateValue] = useState(date)
+  const [seatsValue, setSeatsValue] = useLocalStorage<string>("seats", '1')
+  const [trips, setTrips] = useLocalStorage<any[]>("trips", [])
+  const [loading, setIsLoading] = useState(false)
+  const [error, setError] = useState<null | string>(null)
   const [formIsValid, setFormIsValid] = useState(false)
+  const [fetchIsFinished, setFetchIsFinished] = useState(false)
   const [checked, setChecked] = useState({li1: false, li2: false, li3: false, li4: false})
   let url = 'http://localhost:8081/get'
-
 
   const params = {
     arrival: arrivalValue.trim(),
@@ -38,6 +40,31 @@ export const MainPage: React.FC = () => {
     setDepartureValue(arrivalValue);
     setArrivalValue(departureValue);
   }
+
+  const fetchTrip  = async  (url:string,  params: {
+    arrival: string;
+    day: string;
+    seats: string;
+    departure: string; }) =>
+     {
+      try {
+        setIsLoading(true)
+        console.log(params)
+        const response = await axios.get(url, {
+          params : {
+            arrival: params.arrival,
+            seats: params.seats,
+            day: params.day ,
+            departure: params.departure
+          }
+        })
+        setTrips(response.data)
+        setIsLoading(false)
+      } catch (e) {
+        setError("Произошла ошибка при загрузке поездок")
+        setIsLoading(false)
+      }
+    }
 
 
   useEffect(()=> {
@@ -75,30 +102,38 @@ export const MainPage: React.FC = () => {
   const submitHandler = ( event: React.FormEvent) => {
     event.preventDefault();
     if (formIsValid) {
-      fetchTrip(url, params )
+      setFetchIsFinished(false)
+      fetchTrip('http://localhost:8081/get', params )
+      setFetchIsFinished(true)
     }
   }
   useEffect(() => {
     if (checked.li1) {
       url = 'http://localhost:8081/get/before_six_am'
+      setFetchIsFinished(false)
       fetchTrip(url, params)
+      setFetchIsFinished(true)
     }
     if (checked.li2) {
       url = 'http://localhost:8081/get/form_six_to_noon'
+      setFetchIsFinished(false)
       fetchTrip(url, params )
-    }
+      setFetchIsFinished(true)
+    }else
     if (checked.li3) {
       url = ''
       console.log(url)
-    }
+
+    }else
     if (checked.li4) {
       url = 'http://localhost:8082/get/after_six_pm'
       console.log(url)
-    }
-    if ( !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
+    } else
+    if (!!trips.length && !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
       fetchTrip('http://localhost:8081/get', params )
     }
   }, [checked])
+  console.log(fetchIsFinished)
   return (
       <div className={classes.page}>
         <form   onSubmit={submitHandler}>
@@ -185,8 +220,7 @@ export const MainPage: React.FC = () => {
         </div> }
         <div className={classes.loading}>
           {loading && <Loading type={'spin'} color={'#7588ff'} />}
-          {trips.length === 0 && !loading && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
-          {error}
+          {trips.length===0 && !loading && fetchIsFinished && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
         </div>
       </div>
   )
