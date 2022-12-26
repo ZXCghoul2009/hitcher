@@ -24,11 +24,19 @@ export const MainPage: React.FC = () => {
   const [checked, setChecked] = useState({li1: false, li2: false, li3: false, li4: false})
   let url = 'http://localhost:8081/get'
 
+
+  const params = {
+    arrival: arrivalValue.trim(),
+    seats: seatsValue,
+    day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
+    departure: departureValue.trim()
+  }
+
+
   const switchHandler = (event: React.MouseEvent) => {
     event.preventDefault()
     setDepartureValue(arrivalValue);
     setArrivalValue(departureValue);
-
   }
 
 
@@ -67,17 +75,17 @@ export const MainPage: React.FC = () => {
   const submitHandler = ( event: React.FormEvent) => {
     event.preventDefault();
     if (formIsValid) {
-      fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+      fetchTrip(url, params )
     }
   }
   useEffect(() => {
     if (checked.li1) {
       url = 'http://localhost:8081/get/before_six_am'
-      fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+      fetchTrip(url, params)
     }
     if (checked.li2) {
       url = 'http://localhost:8081/get/form_six_to_noon'
-      fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+      fetchTrip(url, params )
     }
     if (checked.li3) {
       url = ''
@@ -88,94 +96,98 @@ export const MainPage: React.FC = () => {
       console.log(url)
     }
     if ( !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
-      fetchTrip('http://localhost:8081/get', arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+      fetchTrip('http://localhost:8081/get', params )
     }
   }, [checked])
-    return (
-        <div className={classes.page}>
-            <form   onSubmit={submitHandler}>
-            <div className={classes.container}>
+  return (
+      <div className={classes.page}>
+        <form   onSubmit={submitHandler}>
+          <div className={classes.container}>
             <h1>Поездки на ваш выбор</h1>
             <div className={classes.form_container}>
 
-                    <div className={classes.input_container}>
-                        <Input type="text" placeholder="Откуда"
-
-                              required ref={departureValue}
-
-                        />
-                        <ul className={classes.auto_complete}>
-                            {
-                                departureValue ? filteredDepartureCities.map((item:any) => {
-                                    return (
-                                        <li
-                                            onClick={cityDepartureClickHandler}
-                                        >{item.name} </li>
-                                )
-                            }) : null
-                            }
-                        </ul>
-                    </div>
-                <div className={classes.arrows} onClick={switchHandler}/>
-                    <div className={classes.input_container} >
-                        <Input type="text" placeholder="Куда"
-                               ref={arrivalValue}
-                        />
-                        <ul className={classes.auto_complete}>
-                            {
-                                arrivalValue ? filteredArrivalCities.map((item:any) => {
-                                    return (
-                                        <li
-                                            onClick={cityArrivalClickHandler}
-                                        >{item.name} </li>
-                                    )
-                                }) : null
-                            }
-                        </ul>
-                    </div>
-                    <div className={classes.input_container}>
-                        <DateInput label={''} value={ dateValue} readOnly
-                               onChange={(date)=>{
-                                   setDateValue(date);
-                               }}
-
-                        />
-                    </div>
-                    <div className={classes.input_container}>
-                        <Input type="number" placeholder="Мест" min="1" value={seatsValue}
-                               onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
-                                   setSeatsValue(event.target.value)
-                               }}/>
-                    </div>
-                    <Button  disabled={formIsValid}>Поиск</Button>
-            </div>
-            </div>
-            </form>
-          {trips.length !== 0 && <div className={classes.content}>
-              <div className={classes.sort_items}>
-                  <h3>Время выезда</h3>
-                  <ul>
-                      <li >
-                          <CheckBox
-                              onClick={() => setChecked({...checked, li1: !checked.li1, li2: false, li3: false, li4: false })  }
-                              checked={checked.li1}
-                              label={'До 6:00'}
-                          />
-                      </li>
-                      <li ><CheckBox onClick={() => setChecked({...checked, li2: !checked.li2, li1: false, li3: false, li4: false })} checked={checked.li2} label={'6:00-12:00'}/></li>
-                      <li ><CheckBox onClick={() => setChecked({...checked, li3: !checked.li3, li1: false, li2: false, li4: false }) } checked={checked.li3} label={'12:00-18:00'}/></li>
-                      <li ><CheckBox onClick={() => setChecked({...checked, li4: !checked.li4, li1: false, li2: false, li3: false }) } checked={checked.li4} label={'После 18:00'}/></li>
-                  </ul>
+              <div className={classes.input_container}>
+                <Input type="text" placeholder="Откуда"
+                       value={departureValue}
+                       onChange={(event :any)=>{
+                         setDepartureValue(event.target.value)
+                       }}
+                />
+                <ul className={classes.auto_complete}>
+                  {
+                    departureValue ? filteredDepartureCities.map((item:any) => {
+                      return (
+                          <li
+                              onClick={cityDepartureClickHandler}
+                          >{item.name} </li>
+                      )
+                    }) : null
+                  }
+                </ul>
               </div>
-              <div className={classes.cards}>
-                  <Card trips={trips}/>
+              <div className={classes.arrows} onClick={switchHandler}/>
+              <div className={classes.input_container} >
+                <Input type="text" placeholder="Куда"
+                       value={arrivalValue}
+                       onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
+                         setArrivalValue(event.target.value)
+                       }}
+                />
+                <ul className={classes.auto_complete}>
+                  {
+                    arrivalValue ? filteredArrivalCities.map((item:any) => {
+                      return (
+                          <li
+                              onClick={cityArrivalClickHandler}
+                          >{item.name} </li>
+                      )
+                    }) : null
+                  }
+                </ul>
               </div>
-          </div> }
-          <div className={classes.loading}>
-            {loading && <Loading type={'spin'} color={'#7588ff'} />}
-            {trips.length === 0 && !loading && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
-            {error}
+              <div className={classes.input_container}>
+                <DateInput label={''} value={ dateValue} readOnly
+                           onChange={(date)=>{
+                             setDateValue(date);
+                           }}
+
+                />
+              </div>
+              <div className={classes.input_container}>
+                <Input type="number" placeholder="Мест" min="1" value={seatsValue}
+                       onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
+                         setSeatsValue(event.target.value)
+                       }}/>
+              </div>
+              <Button  disabled={formIsValid}>Поиск</Button>
+            </div>
           </div>
+        </form>
+        {trips.length !== 0 && <div className={classes.content}>
+            <div className={classes.sort_items}>
+                <h3>Время выезда</h3>
+                <ul>
+                    <li >
+                        <CheckBox
+                            onClick={() => setChecked({...checked, li1: !checked.li1, li2: false, li3: false, li4: false })  }
+                            checked={checked.li1}
+                            label={'До 6:00'}
+                        />
+                    </li>
+                    <li ><CheckBox onClick={() => setChecked({...checked, li2: !checked.li2, li1: false, li3: false, li4: false })} checked={checked.li2} label={'6:00-12:00'}/></li>
+                    <li ><CheckBox onClick={() => setChecked({...checked, li3: !checked.li3, li1: false, li2: false, li4: false }) } checked={checked.li3} label={'12:00-18:00'}/></li>
+                    <li ><CheckBox onClick={() => setChecked({...checked, li4: !checked.li4, li1: false, li2: false, li3: false }) } checked={checked.li4} label={'После 18:00'}/></li>
+                </ul>
+            </div>
+            <div className={classes.cards}>
+                <Card trips={trips}/>
+            </div>
+        </div> }
+        <div className={classes.loading}>
+          {loading && <Loading type={'spin'} color={'#7588ff'} />}
+          {trips.length === 0 && !loading && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
+          {error}
         </div>
-    )
+      </div>
+  )
 }
