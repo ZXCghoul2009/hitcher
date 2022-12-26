@@ -70,17 +70,43 @@
 textarea:focus, input:focus{
     outline: none;
 }
-hr {
-  border: 5px solid white;
-}
+
 form {
     all: unset;
 }
+
+.content {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .not_found_text {
     text-align: center;
     font-size: 2rem;
     align-items: center;
     margin-top: 1.2rem;
+}
+
+.cards {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.sort_items {
+    width:20%;
+    margin-right: 2rem;
+}
+
+
+.sort_items li {
+    display: flex;
+    font-size: 1.3rem;
+}
+.sort_items li:hover {
+    background-color: rgba(145, 145, 145, 0.11);
 }
 
 .arrows {
@@ -96,7 +122,8 @@ form {
 @media only screen and (max-width: 1200px) {
     .form_container {
         flex-direction: column;
-        max-width: 35%;
+        max-width: 40%;
+
     }
     .container h1 {
         text-indent: 100%;

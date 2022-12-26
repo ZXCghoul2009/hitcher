@@ -8,6 +8,10 @@ export interface Cards {
     price:number;
     description?:string;
     user?:null;
+    smoke?:null;
+    animals?:null;
+    tree_back?:null;
+    // chenge types
 }
 export interface Trip {
     id: number,
@@ -19,4 +23,8 @@ export interface Trip {
     price:number;
     description?:string;
     user?:null;
+    smoke?:null;
+    animals?:null;
+    tree_back?:null;
+    // chenge types
 }

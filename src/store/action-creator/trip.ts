@@ -3,11 +3,11 @@ import {Dispatch} from "redux";
 import axios from "axios";
 
 
-export const fetchTrip = (arrival = '', seats = '1',day ='', departure ='') => {
+export const fetchTrip = (url = '', arrival = '', seats = '1',day ='', departure ='') => {
   return async (dispatch: Dispatch<TripActionType>) => {
     try {
       dispatch({type: TripActions.FETCH_TRIP})
-      const response = await axios.get('http://localhost:8081/get', {
+      const response = await axios.get(url, {
         params : {
           arrival: arrival,
           seats: seats,

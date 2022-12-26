@@ -2,41 +2,41 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .checkbox {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
-  height: 0.07rem;
+  height: 2rem;
   overflow: hidden;
   position: absolute;
   white-space: nowrap;
-  width: 0.07rem;
+  width: 2rem;
 }
 
 .custom_checkbox {
   display: inline-block;
   cursor: pointer;
-  width: 0.93rem;
-  height: 0.93rem;
-  border: 0.14rem solid var(--color-accent7);
-  background: transparent;
-  border-radius: 0.35rem;
+  width: 2rem;
+  height: 2rem;
+  background-image: url('../../../../static/images/checkpoint.svg');
+  background-size: 2rem 2rem;
 }
 
-.custom_checkbox:hover {
-  border: 0.14rem solid var(--color-accent7);
-}
 
 .checkbox:checked ~ .custom_checkbox {
   border: none;
-  background-image: url('../../../../static/images/checkbox.svg');
+  background-color: transparent;
+  background-size: 2rem 2rem;
+  background-image: url('../../../../static/images/checkpoint1.svg');
 }
 
 .label {
-  user-select: none;
   color: var(--color-text);
   display: inline-block;
-  margin-left: 0.35rem;
-  font-size: 0.85rem;
+  margin-right: 0.35rem;
+  font-size: 1.2rem;
+  padding: 1rem;
 }
