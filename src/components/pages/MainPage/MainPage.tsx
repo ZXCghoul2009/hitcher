@@ -8,16 +8,32 @@ import {CheckBox, DateInput} from "../../../UI/fields";
 import {Loading} from "../../../UI/Loading/Loading";
 import useLocalStorage from "use-local-storage";
 import axios from "axios";
+
+
 // раздетить на компоненты адаптив
 // картинку для свитча городов
 //  sort component
 export const MainPage: React.FC = () => {
+  let date = new Date()
 
-  let date = new Date();
+  const options = {
+    serializer: (obj:any) => {
+
+      return obj;
+    },
+    parser: (str:any) => {
+
+      return new Date(str);
+    },
+    logger: (error:any) => {
+      return error
+    },
+    syncData: false
+  };
 
   const [departureValue, setDepartureValue] = useLocalStorage<string>("departure", '');
   const [arrivalValue, setArrivalValue] = useLocalStorage<string>("arrival", '');
-  const [dateValue, setDateValue] = useState(date)
+  const [dateValue, setDateValue] = useLocalStorage<any>('date', date, options)
   const [seatsValue, setSeatsValue] = useLocalStorage<string>("seats", '1')
   const [trips, setTrips] = useLocalStorage<any[]>("trips", [])
   const [loading, setIsLoading] = useState(false)
@@ -30,10 +46,9 @@ export const MainPage: React.FC = () => {
   const params = {
     arrival: arrivalValue.trim(),
     seats: seatsValue,
-    day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
+    day:  dateValue.toLocaleDateString().split('.').reverse().join('-'),
     departure: departureValue.trim()
   }
-
 
   const switchHandler = (event: React.MouseEvent) => {
     event.preventDefault()
@@ -61,7 +76,7 @@ export const MainPage: React.FC = () => {
         setTrips(response.data)
         setIsLoading(false)
       } catch (e) {
-        setError("Произошла ошибка при загрузке поездок")
+        setError(`${e}`)
         setIsLoading(false)
       }
     }
@@ -103,7 +118,7 @@ export const MainPage: React.FC = () => {
     event.preventDefault();
     if (formIsValid) {
       setFetchIsFinished(false)
-      fetchTrip('http://localhost:8081/get', params )
+      fetchTrip('http://localhost:8081/get', params ).catch()
       setFetchIsFinished(true)
     }
   }
@@ -221,6 +236,7 @@ export const MainPage: React.FC = () => {
         <div className={classes.loading}>
           {loading && <Loading type={'spin'} color={'#7588ff'} />}
           {trips.length===0 && !loading && fetchIsFinished && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
+          {!!trips && error}
         </div>
       </div>
   )
