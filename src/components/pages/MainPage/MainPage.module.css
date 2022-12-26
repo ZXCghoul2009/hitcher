@@ -109,6 +109,12 @@ form {
     background-color: rgba(145, 145, 145, 0.11);
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem;
+}
+
 .arrows {
     background-image: url("../../../assets/../static/images/arrow_left_right_line_icon.svg");
     background-repeat: no-repeat;

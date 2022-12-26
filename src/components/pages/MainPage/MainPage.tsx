@@ -7,68 +7,70 @@ import {Cities} from "../../../Data/Cities";
 import {CheckBox, DateInput} from "../../../UI/fields";
 import {useTypedSelector} from "../../../utils/hooks/useTypedSelector";
 import {useActions} from "../../../utils/hooks/useActions";
+import {Loading} from "../../../UI/Loading/Loading";
 // раздетить на компоненты адаптив
 // картинку для свитча городов
 //  sort component
 export const MainPage: React.FC = () => {
-    let date = new Date();
-    const {trips} = useTypedSelector(state => state.trip)
-    const {fetchTrip} = useActions()
-    const [departureValue, setDepartureValue] = useState('');
-    const [arrivalValue, setArrivalValue] = useState('');
-    const [dateValue, setDateValue] = useState(date);
-    const [seatsValue, setSeatsValue] = useState('1')
-    const [formIsValid, setFormIsValid] = useState(false)
-    const [checked, setChecked] = useState({li1: false, li2: false, li3: false, li4: false})
-    let url = 'http://localhost:8081/get'
 
-    const switchHandler = (event: React.MouseEvent) => {
-        event.preventDefault()
-        setDepartureValue(arrivalValue);
-        setArrivalValue(departureValue);
+  let date = new Date();
+  const {trips, loading, error} = useTypedSelector(state => state.trip)
+  const {fetchTrip} = useActions()
+  const [departureValue, setDepartureValue] = useState('');
+  const [arrivalValue, setArrivalValue] = useState('');
+  const [dateValue, setDateValue] = useState(date);
+  const [seatsValue, setSeatsValue] = useState('1')
+  const [formIsValid, setFormIsValid] = useState(false)
+  const [checked, setChecked] = useState({li1: false, li2: false, li3: false, li4: false})
+  let url = 'http://localhost:8081/get'
 
+  const switchHandler = (event: React.MouseEvent) => {
+    event.preventDefault()
+    setDepartureValue(arrivalValue);
+    setArrivalValue(departureValue);
+
+  }
+
+
+  useEffect(()=> {
+    const identifier = setTimeout(()=>{
+      setFormIsValid(
+          departureValue.length > 2 && arrivalValue.length > 2
+      )
+    }, 500)
+    return () => {
+      clearTimeout(identifier);
     }
+  }, [ departureValue, arrivalValue ])
+
+  const filteredDepartureCities = Cities.filter(city => {
+    if (departureValue.length > 1) {
+      return city.name.toLowerCase().includes(departureValue.toLowerCase());
+    } else return null;
+  })
+
+  const filteredArrivalCities = Cities.filter(city => {
+    if (arrivalValue.length > 1) {
+      return city.name.toLowerCase().includes(arrivalValue.toLowerCase());
+    } else return null;
+  })
 
 
-    useEffect(()=> {
-        const identifier = setTimeout(()=>{
-            setFormIsValid(
-                departureValue.length > 2 && arrivalValue.length > 2
-            )
-        }, 500)
-        return () => {
-            clearTimeout(identifier);
-        }
-    }, [ departureValue, arrivalValue ])
+  const cityDepartureClickHandler = (event: any) => {
+    setDepartureValue(event.target.textContent)
+  }
 
-    const filteredDepartureCities = Cities.filter(city => {
-        if (departureValue.length > 1) {
-            return city.name.toLowerCase().includes(departureValue.toLowerCase());
-        } else return null;
-    })
+  const cityArrivalClickHandler = (event: any) => {
+    setArrivalValue(event.target.textContent)
+  }
 
-    const filteredArrivalCities = Cities.filter(city => {
-        if (arrivalValue.length > 1) {
-            return city.name.toLowerCase().includes(arrivalValue.toLowerCase());
-        } else return null;
-    })
-
-
-    const cityDepartureClickHandler = (event: any) => {
-        setDepartureValue(event.target.textContent)
+  const submitHandler = ( event: React.FormEvent) => {
+    event.preventDefault();
+    if (formIsValid) {
+      fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
     }
-
-    const cityArrivalClickHandler = (event: any) => {
-        setArrivalValue(event.target.textContent)
-    }
-
-    const submitHandler = ( event: React.FormEvent) => {
-        event.preventDefault();
-      if (formIsValid) {
-        fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
-      }
-    }
-    useEffect(() => {
+  }
+  useEffect(() => {
     if (checked.li1) {
       url = 'http://localhost:8081/get/before_six_am'
       fetchTrip(url, arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
@@ -85,10 +87,10 @@ export const MainPage: React.FC = () => {
       url = 'http://localhost:8082/get/after_six_pm'
       console.log(url)
     }
-      if ( !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
-        fetchTrip('http://localhost:8081/get', arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
-      }
-    }, [checked])
+    if ( !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
+      fetchTrip('http://localhost:8081/get', arrivalValue.trim(), seatsValue, dateValue.toLocaleDateString().split('.').reverse().join('-'), departureValue.trim())
+    }
+  }, [checked])
     return (
         <div className={classes.page}>
             <form   onSubmit={submitHandler}>
@@ -98,10 +100,9 @@ export const MainPage: React.FC = () => {
 
                     <div className={classes.input_container}>
                         <Input type="text" placeholder="Откуда"
-                               value={departureValue}
-                               onChange={(event :any)=>{
-                                   setDepartureValue(event.target.value)
-                               }}
+
+                              required ref={departureValue}
+
                         />
                         <ul className={classes.auto_complete}>
                             {
@@ -118,10 +119,7 @@ export const MainPage: React.FC = () => {
                 <div className={classes.arrows} onClick={switchHandler}/>
                     <div className={classes.input_container} >
                         <Input type="text" placeholder="Куда"
-                               value={arrivalValue}
-                               onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
-                                   setArrivalValue(event.target.value)
-                               }}
+                               ref={arrivalValue}
                         />
                         <ul className={classes.auto_complete}>
                             {
@@ -136,7 +134,7 @@ export const MainPage: React.FC = () => {
                         </ul>
                     </div>
                     <div className={classes.input_container}>
-                        <DateInput label={''} value={dateValue} readOnly
+                        <DateInput label={''} value={ dateValue} readOnly
                                onChange={(date)=>{
                                    setDateValue(date);
                                }}
@@ -170,11 +168,14 @@ export const MainPage: React.FC = () => {
                   </ul>
               </div>
               <div className={classes.cards}>
-                {trips.length === 0 && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
                   <Card trips={trips}/>
               </div>
           </div> }
-
+          <div className={classes.loading}>
+            {loading && <Loading type={'spin'} color={'#7588ff'} />}
+            {trips.length === 0 && !loading && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
+            {error}
+          </div>
         </div>
     )
 }

@@ -13,7 +13,7 @@ export const Card: React.FC<CardListProps> =({ trips}) => {
     return (
         <div className={styles.cards} >
             {trips.map(trip =>
-                    <CardItem onClick={(card)=> history('/'+trip.id)} key={trip.id} trip={trip}/>
+                    <CardItem onClick={(trip)=> history('/'+trip.id)} key={trip.id} trip={trip}/>
             )}
         </div>
     )
