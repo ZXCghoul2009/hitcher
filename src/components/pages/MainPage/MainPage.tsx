@@ -12,20 +12,20 @@ import axios from "axios";
 
 // раздетить на компоненты адаптив
 // картинку для свитча городов
-//  sort component
+
 export const MainPage: React.FC = () => {
   let date = new Date()
 
   const options = {
-    serializer: (obj:any) => {
+    serializer: (obj: any) => {
 
       return obj;
     },
-    parser: (str:any) => {
+    parser: (str: any) => {
 
       return new Date(str);
     },
-    logger: (error:any) => {
+    logger: (error: any) => {
       return error
     },
     syncData: false
@@ -33,7 +33,7 @@ export const MainPage: React.FC = () => {
 
   const [departureValue, setDepartureValue] = useLocalStorage<string>("departure", '');
   const [arrivalValue, setArrivalValue] = useLocalStorage<string>("arrival", '');
-  const [dateValue, setDateValue] = useLocalStorage<any>('date', date, options)
+  const [dateValue, setDateValue] = useLocalStorage<Date>('date', date, options)
   const [seatsValue, setSeatsValue] = useLocalStorage<string>("seats", '1')
   const [trips, setTrips] = useLocalStorage<any[]>("trips", [])
   const [loading, setIsLoading] = useState(false)
@@ -46,7 +46,7 @@ export const MainPage: React.FC = () => {
   const params = {
     arrival: arrivalValue.trim(),
     seats: seatsValue,
-    day:  dateValue.toLocaleDateString().split('.').reverse().join('-'),
+    day: dateValue.toLocaleDateString().split('.').reverse().join('-'),
     departure: departureValue.trim()
   }
 
@@ -56,34 +56,44 @@ export const MainPage: React.FC = () => {
     setArrivalValue(departureValue);
   }
 
-  const fetchTrip  = async  (url:string,  params: {
+  useEffect(() => {
+    window.addEventListener("beforeunload", resetLocalStorage);
+    return () => {
+      window.removeEventListener("beforeunload", resetLocalStorage);
+    };
+  }, []);
+
+  const resetLocalStorage = () => {
+    return localStorage.clear()
+  }
+
+  const fetchTrip = async (url: string, params: {
     arrival: string;
     day: string;
     seats: string;
-    departure: string; }) =>
-     {
-      try {
-        setIsLoading(true)
-        console.log(params)
-        const response = await axios.get(url, {
-          params : {
-            arrival: params.arrival,
-            seats: params.seats,
-            day: params.day ,
-            departure: params.departure
-          }
-        })
-        setTrips(response.data)
-        setIsLoading(false)
-      } catch (e) {
-        setError(`${e}`)
-        setIsLoading(false)
-      }
+    departure: string;
+  }) => {
+    try {
+      setIsLoading(true)
+      const response = await axios.get(url, {
+        params: {
+          arrival: params.arrival,
+          seats: params.seats,
+          day: params.day,
+          departure: params.departure
+        }
+      })
+      setTrips(response.data)
+      setIsLoading(false)
+    } catch (e) {
+      setError(`${e}`)
+      setIsLoading(false)
     }
+  }
 
 
-  useEffect(()=> {
-    const identifier = setTimeout(()=>{
+  useEffect(() => {
+    const identifier = setTimeout(() => {
       setFormIsValid(
           departureValue.length > 2 && arrivalValue.length > 2
       )
@@ -91,7 +101,7 @@ export const MainPage: React.FC = () => {
     return () => {
       clearTimeout(identifier);
     }
-  }, [ departureValue, arrivalValue ])
+  }, [departureValue, arrivalValue])
 
   const filteredDepartureCities = Cities.filter(city => {
     if (departureValue.length > 1) {
@@ -114,11 +124,11 @@ export const MainPage: React.FC = () => {
     setArrivalValue(event.target.textContent)
   }
 
-  const submitHandler = ( event: React.FormEvent) => {
+  const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     if (formIsValid) {
       setFetchIsFinished(false)
-      fetchTrip('http://localhost:8081/get', params ).catch()
+      fetchTrip('http://localhost:8081/get', params).catch()
       setFetchIsFinished(true)
     }
   }
@@ -132,26 +142,23 @@ export const MainPage: React.FC = () => {
     if (checked.li2) {
       url = 'http://localhost:8081/get/form_six_to_noon'
       setFetchIsFinished(false)
-      fetchTrip(url, params )
+      fetchTrip(url, params)
       setFetchIsFinished(true)
-    }else
-    if (checked.li3) {
+    } else if (checked.li3) {
       url = ''
       console.log(url)
 
-    }else
-    if (checked.li4) {
+    } else if (checked.li4) {
       url = 'http://localhost:8082/get/after_six_pm'
       console.log(url)
-    } else
-    if (!!trips.length && !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4 ) {
-      fetchTrip('http://localhost:8081/get', params )
+    } else if (!!trips.length && !checked.li1 && !checked.li2 && !checked.li3 && !checked.li4) {
+      fetchTrip('http://localhost:8081/get', params)
     }
   }, [checked])
-  console.log(fetchIsFinished)
+
   return (
       <div className={classes.page}>
-        <form   onSubmit={submitHandler}>
+        <form onSubmit={submitHandler}>
           <div className={classes.container}>
             <h1>Поездки на ваш выбор</h1>
             <div className={classes.form_container}>
@@ -159,13 +166,13 @@ export const MainPage: React.FC = () => {
               <div className={classes.input_container}>
                 <Input type="text" placeholder="Откуда"
                        value={departureValue}
-                       onChange={(event :any)=>{
+                       onChange={(event: any) => {
                          setDepartureValue(event.target.value)
                        }}
                 />
                 <ul className={classes.auto_complete}>
                   {
-                    departureValue ? filteredDepartureCities.map((item:any) => {
+                    departureValue ? filteredDepartureCities.map((item: any) => {
                       return (
                           <li
                               onClick={cityDepartureClickHandler}
@@ -176,16 +183,16 @@ export const MainPage: React.FC = () => {
                 </ul>
               </div>
               <div className={classes.arrows} onClick={switchHandler}/>
-              <div className={classes.input_container} >
+              <div className={classes.input_container}>
                 <Input type="text" placeholder="Куда"
                        value={arrivalValue}
-                       onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
+                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                          setArrivalValue(event.target.value)
                        }}
                 />
                 <ul className={classes.auto_complete}>
                   {
-                    arrivalValue ? filteredArrivalCities.map((item:any) => {
+                    arrivalValue ? filteredArrivalCities.map((item: any) => {
                       return (
                           <li
                               onClick={cityArrivalClickHandler}
@@ -196,8 +203,8 @@ export const MainPage: React.FC = () => {
                 </ul>
               </div>
               <div className={classes.input_container}>
-                <DateInput label={''} value={ dateValue} readOnly
-                           onChange={(date)=>{
+                <DateInput label={''} value={dateValue} readOnly
+                           onChange={(date) => {
                              setDateValue(date);
                            }}
 
@@ -205,11 +212,11 @@ export const MainPage: React.FC = () => {
               </div>
               <div className={classes.input_container}>
                 <Input type="number" placeholder="Мест" min="1" value={seatsValue}
-                       onChange={(event :React.ChangeEvent<HTMLInputElement>)=>{
+                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                          setSeatsValue(event.target.value)
                        }}/>
               </div>
-              <Button  disabled={formIsValid}>Поиск</Button>
+              <Button disabled={formIsValid}>Поиск</Button>
             </div>
           </div>
         </form>
@@ -217,25 +224,38 @@ export const MainPage: React.FC = () => {
             <div className={classes.sort_items}>
                 <h3>Время выезда</h3>
                 <ul>
-                    <li >
+                    <li>
                         <CheckBox
-                            onClick={() => setChecked({...checked, li1: !checked.li1, li2: false, li3: false, li4: false })  }
+                            onClick={() => setChecked({
+                              ...checked,
+                              li1: !checked.li1,
+                              li2: false,
+                              li3: false,
+                              li4: false
+                            })}
                             checked={checked.li1}
                             label={'До 6:00'}
                         />
                     </li>
-                    <li ><CheckBox onClick={() => setChecked({...checked, li2: !checked.li2, li1: false, li3: false, li4: false })} checked={checked.li2} label={'6:00-12:00'}/></li>
-                    <li ><CheckBox onClick={() => setChecked({...checked, li3: !checked.li3, li1: false, li2: false, li4: false }) } checked={checked.li3} label={'12:00-18:00'}/></li>
-                    <li ><CheckBox onClick={() => setChecked({...checked, li4: !checked.li4, li1: false, li2: false, li3: false }) } checked={checked.li4} label={'После 18:00'}/></li>
+                    <li><CheckBox
+                        onClick={() => setChecked({...checked, li2: !checked.li2, li1: false, li3: false, li4: false})}
+                        checked={checked.li2} label={'6:00-12:00'}/></li>
+                    <li><CheckBox
+                        onClick={() => setChecked({...checked, li3: !checked.li3, li1: false, li2: false, li4: false})}
+                        checked={checked.li3} label={'12:00-18:00'}/></li>
+                    <li><CheckBox
+                        onClick={() => setChecked({...checked, li4: !checked.li4, li1: false, li2: false, li3: false})}
+                        checked={checked.li4} label={'После 18:00'}/></li>
                 </ul>
             </div>
             <div className={classes.cards}>
                 <Card trips={trips}/>
             </div>
-        </div> }
+        </div>}
         <div className={classes.loading}>
-          {loading && <Loading type={'spin'} color={'#7588ff'} />}
-          {trips.length===0 && !loading && fetchIsFinished && <h1 className={classes.not_found_text}>Поездки не найдены</h1> }
+          {loading && <Loading type={'spin'} color={'#7588ff'}/>}
+          {trips.length === 0 && !loading && fetchIsFinished &&
+          <h1 className={classes.not_found_text}>Поездки не найдены</h1>}
           {!!trips && error}
         </div>
       </div>
