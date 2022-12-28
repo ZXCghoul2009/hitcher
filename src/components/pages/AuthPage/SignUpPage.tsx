@@ -74,17 +74,17 @@ export const SignUpPage = () => {
 
   async function signup () {
     try {
-      await axios.post('http://localhost:8081/signup', {
-        username: formValues.username.trim(),
+      const response = await axios.post('http://localhost:8081/signup', {
+        name: formValues.username.trim(),
+        password: formValues.password,
         email: formValues.email.trim(),
-        password: formValues.password
       }, {
-        headers :  {
-          'Access-Control-Allow-Origin' : '*',
-          'Content-Type': 'application/json',
-          'Accept': '*/*'
-        }
-      })
+
+      }
+      )
+      if(response.data) {
+        navigate('/confirmMail')
+      }
     }catch (e) {
       console.log(e)
     }
@@ -92,7 +92,7 @@ export const SignUpPage = () => {
 
   const SignUpHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!formErrors) {
+    if (!!formErrors) {
       signup()
     }
   }
@@ -140,6 +140,7 @@ export const SignUpPage = () => {
               <label htmlFor="password">Пароль</label>
               <div className={styles.input_container}>
                 <PasswordInput
+                    autoComplete="off"
                     type="password"
                     value={formValues.password}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,6 +160,7 @@ export const SignUpPage = () => {
               <div className={styles.input_container}>
                 <label htmlFor="password">Повторите пароль</label>
                 <PasswordInput
+                    autoComplete="off"
                     type="password"
                     value={formValues.confirmPassword}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,7 +178,7 @@ export const SignUpPage = () => {
                 />
               </div>
               <div>
-                <Button>Создать</Button>
+                <Button type="submit">Создать</Button>
               </div>
             </div>
           </form>

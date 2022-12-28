@@ -8,13 +8,13 @@ interface CardListProps {
     trips: Cards[]
 }
 
-export const Card: React.FC<CardListProps> =({ trips}) => {
+export const Card:React.FC<CardListProps> = React.memo(({trips}) => {
     const history = useNavigate()
     return (
         <div className={styles.cards} >
             {trips.map(trip =>
-                    <CardItem onClick={(trip)=> history('/'+trip.id)} key={trip.id} trip={trip}/>
+                <CardItem onClick={(trip)=> history('/'+trip.id)} key={trip.id} trip={trip}/>
             )}
         </div>
     )
-}
+})

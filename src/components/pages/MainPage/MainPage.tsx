@@ -2,12 +2,15 @@ import React, {useState, useEffect} from "react";
 import classes from './MainPage.module.css'
 import {Input} from "../../../UI/Input/Input";
 import {Card} from '../../Card/Card';
+import {DropDown} from "../../Dropdown/DropDown";
 import {Button} from "../../../UI/Buttons/Button";
-import {Cities} from "../../../Data/Cities";
-import {CheckBox, DateInput} from "../../../UI/fields";
+import {DateInput} from "../../../UI/fields";
 import {Loading} from "../../../UI/Loading/Loading";
 import useLocalStorage from "use-local-storage";
 import axios from "axios";
+import {Dialog} from "@headlessui/react";
+import {options, resetLocalStorage} from "../../../utils/helpers/localstorage/localstorage";
+import {FilterTrips} from "../../FilterTrips/FilterTrips";
 
 
 // раздетить на компоненты адаптив
@@ -15,21 +18,6 @@ import axios from "axios";
 
 export const MainPage: React.FC = () => {
   let date = new Date()
-
-  const options = {
-    serializer: (obj: any) => {
-
-      return obj;
-    },
-    parser: (str: any) => {
-
-      return new Date(str);
-    },
-    logger: (error: any) => {
-      return error
-    },
-    syncData: false
-  };
 
   const [departureValue, setDepartureValue] = useLocalStorage<string>("departure", '');
   const [arrivalValue, setArrivalValue] = useLocalStorage<string>("arrival", '');
@@ -41,7 +29,9 @@ export const MainPage: React.FC = () => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [fetchIsFinished, setFetchIsFinished] = useState(false)
   const [checked, setChecked] = useState({li1: false, li2: false, li3: false, li4: false})
-  let url = 'http://localhost:8081/get'
+  const [isOpen, setIsOpen] = useState(false)
+
+  let url = decodeURI('http://localhost:8081/get')
 
   const params = {
     arrival: arrivalValue.trim(),
@@ -63,9 +53,7 @@ export const MainPage: React.FC = () => {
     };
   }, []);
 
-  const resetLocalStorage = () => {
-    return localStorage.clear()
-  }
+
 
   const fetchTrip = async (url: string, params: {
     arrival: string;
@@ -81,7 +69,12 @@ export const MainPage: React.FC = () => {
           seats: params.seats,
           day: params.day,
           departure: params.departure
+        }, headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
         }
+
       })
       setTrips(response.data)
       setIsLoading(false)
@@ -102,18 +95,6 @@ export const MainPage: React.FC = () => {
       clearTimeout(identifier);
     }
   }, [departureValue, arrivalValue])
-
-  const filteredDepartureCities = Cities.filter(city => {
-    if (departureValue.length > 1) {
-      return city.name.toLowerCase().includes(departureValue.toLowerCase());
-    } else return null;
-  })
-
-  const filteredArrivalCities = Cities.filter(city => {
-    if (arrivalValue.length > 1) {
-      return city.name.toLowerCase().includes(arrivalValue.toLowerCase());
-    } else return null;
-  })
 
 
   const cityDepartureClickHandler = (event: any) => {
@@ -156,13 +137,13 @@ export const MainPage: React.FC = () => {
     }
   }, [checked])
 
+
   return (
-      <div className={classes.page}>
+      <>
         <form onSubmit={submitHandler}>
           <div className={classes.container}>
             <h1>Поездки на ваш выбор</h1>
             <div className={classes.form_container}>
-
               <div className={classes.input_container}>
                 <Input type="text" placeholder="Откуда"
                        value={departureValue}
@@ -170,17 +151,7 @@ export const MainPage: React.FC = () => {
                          setDepartureValue(event.target.value)
                        }}
                 />
-                <ul className={classes.auto_complete}>
-                  {
-                    departureValue ? filteredDepartureCities.map((item: any) => {
-                      return (
-                          <li
-                              onClick={cityDepartureClickHandler}
-                          >{item.name} </li>
-                      )
-                    }) : null
-                  }
-                </ul>
+                <DropDown value={departureValue} cityClickHandler={cityDepartureClickHandler}/>
               </div>
               <div className={classes.arrows} onClick={switchHandler}/>
               <div className={classes.input_container}>
@@ -190,24 +161,13 @@ export const MainPage: React.FC = () => {
                          setArrivalValue(event.target.value)
                        }}
                 />
-                <ul className={classes.auto_complete}>
-                  {
-                    arrivalValue ? filteredArrivalCities.map((item: any) => {
-                      return (
-                          <li
-                              onClick={cityArrivalClickHandler}
-                          >{item.name} </li>
-                      )
-                    }) : null
-                  }
-                </ul>
+                <DropDown value={arrivalValue} cityClickHandler={cityArrivalClickHandler}/>
               </div>
               <div className={classes.input_container}>
                 <DateInput label={''} value={dateValue} readOnly
                            onChange={(date) => {
                              setDateValue(date);
                            }}
-
                 />
               </div>
               <div className={classes.input_container}>
@@ -220,44 +180,36 @@ export const MainPage: React.FC = () => {
             </div>
           </div>
         </form>
-        {trips.length !== 0 && <div className={classes.content}>
-            <div className={classes.sort_items}>
-                <h3>Время выезда</h3>
-                <ul>
-                    <li>
-                        <CheckBox
-                            onClick={() => setChecked({
-                              ...checked,
-                              li1: !checked.li1,
-                              li2: false,
-                              li3: false,
-                              li4: false
-                            })}
-                            checked={checked.li1}
-                            label={'До 6:00'}
-                        />
-                    </li>
-                    <li><CheckBox
-                        onClick={() => setChecked({...checked, li2: !checked.li2, li1: false, li3: false, li4: false})}
-                        checked={checked.li2} label={'6:00-12:00'}/></li>
-                    <li><CheckBox
-                        onClick={() => setChecked({...checked, li3: !checked.li3, li1: false, li2: false, li4: false})}
-                        checked={checked.li3} label={'12:00-18:00'}/></li>
-                    <li><CheckBox
-                        onClick={() => setChecked({...checked, li4: !checked.li4, li1: false, li2: false, li3: false})}
-                        checked={checked.li4} label={'После 18:00'}/></li>
-                </ul>
+        <div className={classes.content}>
+          {trips.length !== 0 && <div className={classes.sort_items}>
+              <h3>Время выезда</h3>
+              <FilterTrips checked={checked} setChecked={setChecked}/>
+          </div>}
+          <div className={classes.cards}>
+            <Card trips={trips}/>
+            <Dialog onClose={() => setIsOpen(false)} open={isOpen}>
+              <div className={classes.sort_items_container}>
+                <Dialog.Panel>
+                  <div className={classes.sort_items_mobile}>
+                    <h3>Время выезда</h3>
+                    <FilterTrips checked={checked} setChecked={setChecked}/>
+                    <button onClick={() => setIsOpen(false)}>Готово</button>
+                  </div>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+            <div className={classes.loading}>
+              {loading && <Loading type={'spin'} color={'#7588ff'}/>}
             </div>
-            <div className={classes.cards}>
-                <Card trips={trips}/>
-            </div>
-        </div>}
-        <div className={classes.loading}>
-          {loading && <Loading type={'spin'} color={'#7588ff'}/>}
+          </div>
+        </div>
+        <div className={classes.errors}>
           {trips.length === 0 && !loading && fetchIsFinished &&
           <h1 className={classes.not_found_text}>Поездки не найдены</h1>}
           {!!trips && error}
+          {trips.length > 0 &&
+          <button onClick={() => setIsOpen(true)} className={classes.button_filter}>Отфильтровать</button>}
         </div>
-      </div>
+      </>
   )
 }
