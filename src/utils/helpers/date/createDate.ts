@@ -7,7 +7,6 @@ interface CreateDateParams {
 
 export const createDate = (params?: CreateDateParams) => {
   const locale = params?.locale ?? 'default';
-
   const d = params?.date ?? new Date();
   const dayNumber = d.getDate();
   const day = d.toLocaleDateString(locale, { weekday: 'long' });
@@ -21,7 +20,6 @@ export const createDate = (params?: CreateDateParams) => {
   const monthIndex = d.getMonth();
   const timestamp = d.getTime();
   const week = getWeekNumber(d);
-
   return {
     date: d,
     dayNumber,
@@ -36,5 +34,7 @@ export const createDate = (params?: CreateDateParams) => {
     monthIndex,
     timestamp,
     week
+
   };
+
 };

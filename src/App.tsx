@@ -23,7 +23,6 @@ function App() {
                   <Route path="/:id" element={<TripPage/>} />
                 <Route path="/confirmMail" element={<VerificationEmailPage/>} />
               </Routes>
-
           </BrowserRouter>
       </>
 

@@ -1,0 +1,23 @@
+.auto_complete {
+    position: absolute;
+    width: 100%;
+    background: white;
+    list-style: none;
+    z-index: 15;
+    margin-top: 15px;
+    padding: 0;
+    box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.15);
+    max-height: 20vh;
+    border-radius: 10px;
+    height: auto;
+    overflow: auto;
+}
+.auto_complete li {
+    padding: 8px;
+    font-size: 0.9rem;
+}
+.auto_complete li:hover {
+    background-color: rgba(237, 237, 237, 0.7);
+    cursor: pointer;
+    transition: cubic-bezier(1, 0, 0, 1) .1s all;
+}
