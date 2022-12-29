@@ -3,58 +3,6 @@
     box-sizing: border-box;
 }
 
-form {
-    padding-top: 3rem;
-}
-
-.container {
-    background-image: url("/src/assets/thumb.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 100%;
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.container h1 {
-    text-shadow: 1px 0 1px #000,
-    0 1px 1px #000,
-    -1px 0 1px #000,
-    0 -1px 1px #000;
-    color: white;
-    font-size: 4rem;
-    font-weight: 800;
-    text-align: center;
-}
-.form_container {
-    background-color: white;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.15);
-    padding: 5px 10px;
-    width: 70%;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-}
-
-.input_container {
-    box-shadow: none;
-    width: 100%;
-    outline:0;
-    position: relative;
-    padding: 0.4rem;
-}
-
-
-textarea:focus, input:focus{
-    outline: none;
-}
-
 .content {
     margin-top: 3rem;
     display: flex;
@@ -107,7 +55,6 @@ textarea:focus, input:focus{
     padding: 3rem;
 }
 
-
 .sort_items_mobile li {
     display: flex;
     font-size: 1.3rem;
@@ -120,16 +67,6 @@ textarea:focus, input:focus{
     display: flex;
     justify-content: center;
     padding-top: 2rem;
-}
-
-.arrows {
-    background-image: url("../../../assets/../static/images/arrow_left_right_line_icon.svg");
-    background-repeat: no-repeat;
-    cursor: pointer;
-    height: 1.6rem;
-    width: 1.6rem;
-    padding: 0.9rem 0.9rem;
-    background-size: 1.6rem 1.6rem;
 }
 
 button {
@@ -160,26 +97,7 @@ button {
     justify-content: center;
 }
 
-@media only screen and (max-width: 1200px) {
-    .form_container {
-        flex-direction: column;
-        max-width: 40%;
-    }
-    .container h1 {
-        text-indent: 100%;
-        overflow: hidden;
-    }
-    .arrows {
-        transform: rotate(90deg);
-    }
-
-@media only screen and (max-width: 650px) {
-    .form_container {
-        flex-direction: column;
-        max-width: 80%;
-    }
-}
-    @media only screen and (max-width: 1200px) and (hover: none) and (pointer: coarse){
+@media only screen and (max-width: 1200px) and (hover: none) and (pointer: coarse){
         .sort_items {
             display: none;
         }
@@ -189,7 +107,6 @@ button {
             bottom: 20px;
             z-index: 200;
         }
-    }
 }
 
 
