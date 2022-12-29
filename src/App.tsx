@@ -7,6 +7,7 @@ import Header from "./components/Header/Header";
 import {TripPage} from "./components/pages/TripPage/TripPage";
 import {SignUpPage} from "./components/pages/AuthPage/SignUpPage";
 import {VerificationEmailPage} from "./components/pages/VerificationEmailPage/VerificationEmailPage";
+import {SearchTripPage} from "./components/pages/SearchTripPage/SearchTripPage";
 
 
 
@@ -17,7 +18,7 @@ function App() {
               <Header/>
               <Routes>
                   <Route path="/" element={<MainPage/>} />
-                  <Route path="/search" element={<MainPage/>} />
+                  <Route path="/search" element={<SearchTripPage/>} />
                   <Route path="/auth" element={<LoginPage/>} />
                   <Route path="/signUp" element={<SignUpPage/>} />
                   <Route path="/:id" element={<TripPage/>} />
