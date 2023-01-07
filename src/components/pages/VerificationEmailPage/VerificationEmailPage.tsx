@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
-import OtpInput from 'react-otp-input';
+import OtpInput from 'react18-input-otp';
 
 import styles from './VerificationEmailPage.module.css'
 
