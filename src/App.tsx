@@ -8,12 +8,14 @@ import {TripPage} from "./components/pages/TripPage/TripPage";
 import {SignUpPage} from "./components/pages/AuthPage/SignUpPage";
 import {VerificationEmailPage} from "./components/pages/VerificationEmailPage/VerificationEmailPage";
 import {SearchTripPage} from "./components/pages/SearchTripPage/SearchTripPage";
-
+import { ReactKeycloakProvider} from "@react-keycloak/web";
+import {kc} from "./utils/service/UserService";
+import {CreateTripPage} from "./components/pages/CreateTripPage/CreateTripPage";
 
 
 function App() {
   return (
-      <>
+      <ReactKeycloakProvider authClient={kc}>
           <BrowserRouter>
               <Header/>
               <Routes>
@@ -22,10 +24,11 @@ function App() {
                   <Route path="/auth" element={<LoginPage/>} />
                   <Route path="/signUp" element={<SignUpPage/>} />
                   <Route path="/:id" element={<TripPage/>} />
+                <Route path="/create-trip" element={<CreateTripPage/>} />
                 <Route path="/confirmMail" element={<VerificationEmailPage/>} />
               </Routes>
           </BrowserRouter>
-      </>
+      </ReactKeycloakProvider>
 
   );
 }
