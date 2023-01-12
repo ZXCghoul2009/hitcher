@@ -1,0 +1,14 @@
+.img_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.img {
+    width: 60px;
+    height: 60px;
+    -webkit-transform: scale(.95);
+    transform: scale(.95);
+    border-radius: 50%;
+}

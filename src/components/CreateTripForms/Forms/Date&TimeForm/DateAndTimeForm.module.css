@@ -1,0 +1,8 @@
+.container{
+    display: flex;
+    padding: 1.2rem;
+}
+
+.time_picker {
+    padding-right: 1rem;
+}

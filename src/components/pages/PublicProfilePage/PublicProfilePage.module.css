@@ -1,0 +1,83 @@
+.page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+    font-size: 16px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: #4a4a4b;
+    height: 80vh;
+    width: 40%;
+    padding: 20px 0;
+}
+
+.user_info {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    padding-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    font-size: 1.7rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(201, 201, 201, 0.6);
+}
+.user_info p{
+    opacity: 0.8;
+    font-size: 1rem;
+    padding-top: 0.6rem;
+    font-weight: normal;
+}
+
+.verified {
+    display: flex;
+    padding: 1.2rem 0;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
+    border-bottom: 5px solid #e3e3e3;
+}
+
+.verified_image {
+    background-image: url("../../../static/images/checkpoint1.svg");
+    background-repeat: no-repeat;
+    background-size: 1.4rem 1.4rem;
+    width: 1.4rem;
+    height:1.4rem;
+    margin: 0 0.8rem;
+}
+
+.about{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 1.2rem 1.2rem;
+    width: 100%;
+    font-size: 1.2rem;
+    border-bottom: 5px solid #e3e3e3;
+}
+
+.about h3 {
+    padding: 1rem 0;
+}
+
+.account_info {
+    padding: 2rem 1rem;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: 5px solid #e3e3e3;
+}
+
+.info {
+    opacity: 0.92;
+    font-size: 1.2rem;
+    padding: 0.3rem 0;
+}

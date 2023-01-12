@@ -1,0 +1,23 @@
+.container{
+    padding: 1.3rem;
+}
+
+.input_container{
+    position: relative;
+}
+.input {
+    border: none;
+    border-bottom: 1px solid rgba(201, 201, 201, 0.6);
+    padding-left: 1.5rem;
+    height: auto;
+    font-size: 1rem;
+}
+.checkpoint {
+    background-image: url("../../../../static/images/circle.svg");
+    background-size: 1.2rem 1.2rem;
+    width: 1.2rem;
+    height:1.2rem;
+    position: relative;
+    bottom: 20px;
+}
+

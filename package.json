@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.7.7",
+    "@ant-design/icons": "latest",
+    "antd": "5.1.2",
+    "dayjs": "latest",
     "@react-keycloak/web": "^3.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

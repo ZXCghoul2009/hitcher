@@ -1,0 +1,119 @@
+.forms_container{
+    display: flex;
+    padding: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+
+}
+
+.form {
+    padding: 1.2rem;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px 2px   rgba(0, 0, 0, 0.25);
+    margin-left: 2rem;
+    background-color: white;
+}
+.item {
+    box-shadow: none;
+    width: 100%;
+    outline:0;
+    position: relative;
+    padding: 0.4rem;
+}
+
+.count_of_steps {
+    display: flex;
+    justify-content: end;
+}
+
+.container {
+    border-radius: 15px;
+    background-color: white;
+}
+
+.checkpoint {
+    background-image: url("../../static/images/circle.svg");
+    background-size: 1.2rem 1.2rem;
+    width: 1.2rem;
+    height:1.2rem;
+    margin-right: 0.7rem;
+
+}
+.people {
+    background-image: url("../../static/images/people.svg");
+    background-size: 1.2rem 1.2rem;
+    width: 1.2rem;
+    height:1.2rem;
+    margin-right: 0.7rem;
+}
+
+.routes {
+    margin-top: 1.4rem;
+}
+.route {
+    display: flex;
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(201, 201, 201, 0.6);
+    margin: 0 2rem;
+}
+
+.seats {
+    display: flex;
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(201, 201, 201, 0.6);
+    margin: 0 2rem;
+}
+.create_trip_btn {
+    font-size: 1.1rem;
+    color: white;
+    background-color: #a3adfa;
+    display:block;
+    width: 100%;
+    border: none;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    margin-top: 3px;
+    padding: 1.2rem ;
+}
+
+
+.create_trip_btn:hover {
+    background-color: #7588ff;
+}
+
+.create_trip_btn:disabled {
+    background-color: #c4c4c4;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons button {
+    color: white;
+    background-color: #a3adfa;
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem ;
+    border: none;
+}
+
+.buttons button:hover {
+    background-color: #7588ff;
+}
+
+.buttons button:disabled {
+    background-color: #c4c4c4;
+}
+
+@media only screen and (max-width: 880px) and (hover: none) and (pointer: coarse){
+    .forms_container {
+        flex-direction: column;
+        margin-top: 3rem;
+    }
+    .form {
+        margin-top: 1rem;
+    }
+
+}

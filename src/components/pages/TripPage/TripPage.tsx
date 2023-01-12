@@ -23,7 +23,7 @@ export const TripPage:React.FC = () => {
       const response = await axios.get<Trip>('http://localhost:8081/get/' + params.id)
       setTrip(response.data)
     } catch (e) {
-
+      
     }
   }
 
