@@ -1,17 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
+import {toast} from "react-toastify";
 import OtpInput from 'react18-input-otp';
 
 import styles from './VerificationEmailPage.module.css'
 
+
 export const VerificationEmailPage: React.FC = () => {
+
+  const notifySuccess = () => toast.success(`Аккаунт активирован`, {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+
+  const notifyError = ( ) => toast.error(`Неверный код`, {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
 
   const navigate = useNavigate()
 
   const [code, setCode] = useState({otp: ''});
-  const [error, setError] = useState<boolean>(true)
 
   const handleChangeOTP = (otp: string) => {
     setCode({ otp })
@@ -24,20 +46,18 @@ export const VerificationEmailPage: React.FC = () => {
           'code' : `${code.otp}`
         }
       })
-      setError(true)
+      notifySuccess()
       navigate('/')
     }catch (e) {
-      console.log(e)
-      setError(false)
+      notifyError()
     }
-
   }
 
   useEffect(()=> {
       if (code.otp.length === 6) {
         checkCode()
       }
-  }, [code])
+  })
 
   return (
       <div className={styles.page}>
@@ -53,7 +73,6 @@ export const VerificationEmailPage: React.FC = () => {
                 isInputNum={true}
                 inputStyle = {styles.otp_field}
               />
-              {!error && <p>Неверный код</p>}
             </div>
           </div>
         </div>

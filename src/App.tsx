@@ -10,14 +10,17 @@ import {VerificationEmailPage} from "./components/pages/VerificationEmailPage/Ve
 import {SearchTripPage} from "./components/pages/SearchTripPage/SearchTripPage";
 import { ReactKeycloakProvider} from "@react-keycloak/web";
 import {kc} from "./utils/service/UserService";
+
 import {CreateTripPage} from "./components/pages/CreateTripPage/CreateTripPage";
 import {PublicProfilePage} from "./components/pages/PublicProfilePage/PublicProfilePage";
+import {ToastContainer} from "react-toastify";
 
 
 function App() {
   return (
 
           <BrowserRouter>
+            <ToastContainer/>
             <Header/>
             <Routes>
               <Route path="/" element={<MainPage/>} />

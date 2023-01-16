@@ -7,6 +7,7 @@ interface CardItemProps {
     onClick: (trip:Cards)=>void;
 }
 
+
 const CardItem: React.FC<CardItemProps> = ({trip, onClick}) => {
     return (
         <div onClick={()=>onClick(trip)} className={styles.card}>

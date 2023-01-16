@@ -8,6 +8,7 @@ import {OptionsForm} from "./Forms/OptionsForm/OptionsForm";
 
 import styles from './CreateTripForm.module.css'
 
+
 interface InitialStateInterface {
   description: string;
   departure: string,
@@ -36,7 +37,6 @@ const InitialState: InitialStateInterface = {
 
 export const CreateTripForm: React.FC = () => {
   const [data, setData] = useState(InitialState)
-
   const updateFields = (fields: Partial<InitialStateInterface>) => {
     setData(prev => {
       return { ...prev, ...fields }

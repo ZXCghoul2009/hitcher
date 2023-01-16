@@ -3,11 +3,12 @@ import { Input } from '../../../UI/Input/Input'
 import {PasswordInput} from '../../../UI/Input/PasswordInput/PasswordInput'
 import { Button } from '../../../UI/Buttons/Button';
 import {useState} from "react";
-
-import styles from './LoginPage.module.css'
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
+import styles from './LoginPage.module.css'
 
 interface FormErrors {
   username: string | null;
@@ -63,14 +64,23 @@ const validateSignUpForm = (name: keyof typeof signUpFormValidateSchema, value: 
   return signUpFormValidateSchema[name](value,password)
 }
 
-export const SignUpPage = () => {
+export const SignUpPage: React.FC = () => {
   const navigate = useNavigate()
 
   const [formValues, setFormValue] = useState({username:'', email: '', password: '', confirmPassword: ''})
   const [formErrors, setFormErrors] = useState<FormErrors>({
     username:null, email: null, password: null, confirmPassword: null
   })
-
+  const notify = (mail: string ) => toast.success(`Мы выслали на вашу почту: ${mail} код активации`, {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
 
   async function signup () {
     try {
@@ -80,11 +90,11 @@ export const SignUpPage = () => {
         email: formValues.email.trim(),
       }, {
 
-      }
-      )
+      })
       if(response.data) {
         navigate('/confirmMail')
       }
+      notify(formValues.email)
     }catch (e) {
       console.log(e)
     }
@@ -178,7 +188,7 @@ export const SignUpPage = () => {
                 />
               </div>
               <div>
-                <Button type="submit">Создать</Button>
+                <Button type="submit" >Создать</Button>
               </div>
             </div>
           </form>
